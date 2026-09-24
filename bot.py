@@ -50,12 +50,15 @@ def send_to_discord(text_content):
         
     payload = {"content": text_content}
     response = requests.post(DISCORD_WEBHOOK_URL, json=payload)
+    
+    # CORRETTO: Controlla se la risposta è 200 o 204 (successo dei Webhook)
     if response.status_code in:
         print("Messaggio inviato a Discord con successo.")
         return True
     else:
         print(f"Errore nell'invio a Discord: {response.status_code}")
         return False
+
 
 def main():
     current_latest_id = fetch_latest_tweet()
