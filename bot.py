@@ -43,7 +43,7 @@ def fetch_latest_tweet():
     return None
 
 def send_to_discord(text_content):
-    """Invia un messaggio di testo generico a Discord."""
+    """Invia un messaggio di testo generico a Discord via Webhook."""
     if not DISCORD_WEBHOOK_URL:
         print("Errore: DISCORD_WEBHOOK non configurato nei segreti di GitHub.")
         return False
@@ -51,14 +51,13 @@ def send_to_discord(text_content):
     payload = {"content": text_content}
     response = requests.post(DISCORD_WEBHOOK_URL, json=payload)
     
-    # CORRETTO: Controlla se la risposta è 200 o 204 (successo dei Webhook)
-    if response.status_code in:
+    # Discord risponde di solito con il codice 204 (No Content) quando il Webhook funziona
+    if response.status_code in [200, 204]:
         print("Messaggio inviato a Discord con successo.")
         return True
     else:
         print(f"Errore nell'invio a Discord: {response.status_code}")
         return False
-
 
 def main():
     current_latest_id = fetch_latest_tweet()
@@ -85,11 +84,11 @@ def main():
         if current_latest_id == stored_second_last_id:
             msg = f"🗑️ **L'ultimo post di @{X_USERNAME} (ID: `{stored_last_id}`) è stato eliminato.**"
             if send_to_discord(msg):
-                # Il post più recente diventa quello che prima era penultimo, e il penultimo diventa vuoto (None)
+                # Il post più recente torna a essere quello che prima era penultimo, e il penultimo si svuota
                 save_posts(stored_second_last_id, None)
                 print("Rilevata eliminazione. Struttura dati aggiornata correttamente.")
                 
-        # CASO 2: È un post completamente nuovo (diverso sia dall'ultimo che dal penultimo)
+        # CASO 2: È un post completamente nuovo
         else:
             tweet_url = f"https://x.com{X_USERNAME}/status/{current_latest_id}"
             msg = f"📢 **Nuovo post da @{X_USERNAME}!**\n{tweet_url}"
