@@ -71,7 +71,7 @@ def main():
 
     # Se non c'è nessuna cronologia precedente, inizializza il file e invia il post
     if stored_last_id is None:
-        tweet_url = f"https://x.com{X_USERNAME}/status/{current_latest_id}"
+        tweet_url = f"https://x.com/{X_USERNAME}/status/{current_latest_id}"
         msg = f"📢 **Nuovo post da @{X_USERNAME}!**\n{tweet_url}"
         if send_to_discord(msg):
             save_posts(current_latest_id, None)
@@ -90,7 +90,7 @@ def main():
                 
         # CASO 2: È un post completamente nuovo
         else:
-            tweet_url = f"https://x.com{X_USERNAME}/status/{current_latest_id}"
+            tweet_url = f"https://x.com/{X_USERNAME}/status/{current_latest_id}"
             msg = f"📢 **Nuovo post da @{X_USERNAME}!**\n{tweet_url}"
             if send_to_discord(msg):
                 # Quello che era l'ultimo diventa il penultimo, e il nuovo diventa l'ultimo
