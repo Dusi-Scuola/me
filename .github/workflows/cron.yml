@@ -9,6 +9,10 @@ on:
 jobs:
   check-and-post:
     runs-on: ubuntu-latest
+    # IMPORTANTE: Permette a GitHub Actions di salvare e pushare il file last_tweet.json nel repository
+    permissions:
+      contents: write
+
     steps:
       - name: Controlla il codice del repository
         uses: actions/checkout@v4
@@ -26,6 +30,11 @@ jobs:
       - name: Esegui lo script Bot
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          # AGGIUNTA: Passa le credenziali dell'account finto di X allo script Python
+          TW_USERNAME: ${{ secrets.TW_USERNAME }}
+          TW_PASSWORD: ${{ secrets.TW_PASSWORD }}
+          TW_EMAIL: ${{ secrets.TW_EMAIL }}
+          TW_EMAIL_PASSWORD: ${{ secrets.TW_EMAIL_PASSWORD }}
         run: python bot.py
 
       - name: Salva l'ultimo ID nel repository (Evita duplicati alla prossima esecuzione)
